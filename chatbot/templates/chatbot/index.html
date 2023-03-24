@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Clone</title>
+</head>
+<body>
+    <h1>ChatGPT Clone</h1>
+
+    <form id="chat-form">
+        {% csrf_token %}
+        <input type="text" id="user-input" name="user_input">
+        <input type="submit" value="Send">
+    </form>
+
+    <div id="chat-log"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').submit(function(event) {
+                event.preventDefault();
+                var user_input = $('#user-input').val();
+                //console.log(user_input);
+                $.ajax({ 
+                    url: 'http://127.0.0.1:8000/',
+                    type: 'POST',
+                    data: {
+                        'user_input': user_input,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
+                        console.log("response:", response);
+                        var bot_response = response.bot_response;
+                        $('#chat-log').append('<p><strong>You:</strong> ' + user_input + '</p>');
+                        $('#chat-log').append('<p><strong>ChatGPT:</strong> ' + bot_response + '</p>');
+                        $('#user-input').val('');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

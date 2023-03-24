@@ -1,0 +1,4 @@
+#I dind't use virtualenv
+#but only have to install 2 packages
+#pip install openai
+#pip install django
